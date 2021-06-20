@@ -68,7 +68,7 @@ def parseOrders(instanceData):
 
 
 @transaction.atomic
-def parseDetailsViews(instanceData, user_dict, event_dict, article_dict):
+def parseDetailsViews(instanceData, user_dict, article_dict):
     KrDetailsView = apps.get_model("api", "KrDetailsView")
     detail_view_list = []
     for index, row in instanceData.iterrows():
@@ -76,14 +76,13 @@ def parseDetailsViews(instanceData, user_dict, event_dict, article_dict):
         print("detailView: ", index)
         details_view = KrDetailsView.objects.create(
             user=user_dict[row["user_id"]],
-            event=event_dict[row["event_name"]],
             article=article_dict[int(row["id"])],
             ts=row["ts"]
             )
 
 
 @transaction.atomic
-def parseTransactions(instanceData, user_dict, event_dict, article_dict, order_dict):
+def parseTransactions(instanceData, user_dict, article_dict, order_dict):
     KrTransaction = apps.get_model("api", "KrTransaction")
     transaction_list = []
     for index, row in instanceData.iterrows():
@@ -91,7 +90,6 @@ def parseTransactions(instanceData, user_dict, event_dict, article_dict, order_d
         print("Transaction: ", index)
         transaction_instance, transaction_instance_created  = KrTransaction.objects.get_or_create(
             user=user_dict[row["user_id"]],
-            event=event_dict[row["event_name"]],
             article=article_dict[int(row["id"])],
             order=None if pd.isnull(row["order_id"]) else order_dict.get(int(row["order_id"])),
             ts=row["ts"]
