@@ -11,7 +11,7 @@ def parseArticles(instanceData):
     article_dict = {}
     for index, row in instanceData.iterrows():
         article = KrArticle()
-        article.id = str(row["id"])
+        article.id = str(int(row["id"]))
         article.name = row["name"]
         article.desc = None if pd.isnull(row["desc"]) else row["desc"]
         
