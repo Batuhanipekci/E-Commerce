@@ -1,4 +1,5 @@
 import uuid
+from django.utils import timezone
 from django.db import models
 
 
@@ -25,10 +26,11 @@ class KrArticle(models.Model):
 
     # The counter that will be visible in the UI (it will be sent in the response body to requests)
     @property
-    def counter_transaction_item(self):
-        transaction_item_list = KrCounter.objects.filter(article=self, event__name="transaction_item").order_by("-ts")
-        if len(transaction_item_list)>0:
-            return transaction_item_list[0]
+    def counter_details_views(self):
+        from api.analytics.models import KrCounter
+        details_views_list = KrCounter.objects.filter(article=self).order_by("-ts")
+        if len(details_views_list)>0:
+            return details_views_list[0].details_views_count
         else:
             return 0
 
@@ -41,7 +43,15 @@ class KrArticle(models.Model):
     # Expose if this is a high_attention article
     @property
     def higher_attention(self):
-        pass
+        from api.analytics.models import KrHighAttentionArticle
+        ts_now = timezone.now()
+        latest_ts = KrHighAttentionArticle.objects.filter(ts__lte=ts_now).order_by("-ts").first()
+        qs = KrHighAttentionArticle.objects.filter(ts=latest_ts).values("article__id")
+        high_attention_id_list = list(qs)
+        if self.id in high_attention_id_list:
+            return True
+        else:
+            return False
 
 
 class KrEvent(models.Model):

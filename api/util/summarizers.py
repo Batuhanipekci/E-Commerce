@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django.db import models
 from django.apps import apps
+from django.db import transaction
 from api.util.iterators import increment_four_hours
 
 
@@ -43,6 +44,16 @@ def populate_counter(ts_begin, ts_end):
     all_articles = KrArticle.objects.all()
 
     for article in all_articles:
-        
         for ts in increment_four_hours(ts_begin, ts_end):
             increment_counter(article, ts)
+
+
+@transaction.atomic
+def populate_high_attention_article(ts_begin, ts_end):
+    KrHighAttentionArticle = apps.get_model("api", "KrHighAttentionArticle")
+    KrCounter = apps.get_model("api", "KrCounter")
+    most_popular_100_article_count = KrCounter.objects.filter(ts_begin__lte=ts_begin, ts_end__lte=ts_end).order_by("-transaction_item_count")[:100]
+    most_popular_100_articles = [instance.article for instance in most_popular_100_article_count]
+    for article in most_popular_100_articles:
+        high_attention_article = KrHighAttentionArticle.objects.create(article=article, ts=ts_end)
+        print(f"{article.id} is a high-attention article between {ts_begin} and {ts_end}")
