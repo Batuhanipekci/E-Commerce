@@ -7,8 +7,13 @@ down:
 remove-db:
 	docker-compose down --remove-orphans -v
 migrate:
-	docker exec app_web_1 python manage.py migrate
+	docker exec e-commerce_web_1 python manage.py migrate
 makemigrations:
-	docker exec app_web_1 python manage.py makemigrations
-collectstatic:
-	docker exec app_web_1 python manage.py collectstatic --no-input --clear
+	docker exec e-commerce_web_1 python manage.py makemigrations
+read-transactions:
+	docker-compose exec web python manage.py runscript read_transactions
+init:
+	docker-compose up -d
+	docker exec e-commerce_web_1 python manage.py migrate
+shell:
+	docker-compose exec web python manage.py shell
