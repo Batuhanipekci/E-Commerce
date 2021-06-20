@@ -1,9 +1,12 @@
 import pandas as pd
+import numpy as np
 from django.apps import apps
 from django.db import transaction
 
 
 BATCHSIZE = 200000
+
+
 # transaction.atomic decorator for bulk updates
 @transaction.atomic
 def parseArticles(instanceData):
