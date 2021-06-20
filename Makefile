@@ -12,6 +12,8 @@ makemigrations:
 	docker exec e-commerce_web_1 python manage.py makemigrations
 read-transactions:
 	docker-compose exec web python manage.py runscript run_read_transactions
+populate-counter:
+	docker-compose exec web python manage.py runscript run_populate_counter
 init:
 	docker-compose up -d
 	docker exec e-commerce_web_1 python manage.py migrate
