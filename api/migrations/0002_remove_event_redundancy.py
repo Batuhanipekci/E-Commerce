@@ -18,4 +18,8 @@ class Migration(migrations.Migration):
             model_name='krtransaction',
             name='event',
         ),
+        migrations.RemoveField(
+            model_name='krcounter',
+            name='event',
+        ),
     ]
