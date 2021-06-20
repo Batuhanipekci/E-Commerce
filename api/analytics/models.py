@@ -32,4 +32,15 @@ class KrCounter(models.Model):
         db_table = 'kr_counter'
     
     def __str__(self):
-        return f"{self.user.email}-{self.article.name}-{self.event.name}"
+        return f"{self.article.name}, detailViews: {self.details_view_count}, transaction_item: {self.transaction_item_count}"
+
+
+class KrHighAttentionArticle(models.Model):
+    article = models.ForeignKey("KrArticle", on_delete=models.CASCADE, db_column="kr_article_id")
+    ts = models.DateTimeField()
+
+    class Meta:
+        db_table = "kr_high_attention_article"
+    
+    def __str__(self):
+        return f"{self.article.id}-{self.ts}"
