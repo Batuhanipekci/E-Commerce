@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django.db import models
 from django.apps import apps
+from api.util.iterators import increment_four_hours
 
 
 def get_counter_config(event, article, ts):
@@ -34,6 +35,19 @@ def get_counter_config(event, article, ts):
 def increment_counter(event, article, ts):
     KrCounter = apps.get_model("api", "KrCounter")
     counter_dict = get_counter_config(event, article, ts)
-    counter = KrCounter()
-    counter.save(**counter_dict)
-    print(f"{counter.id} is saved to db at {ts}")
+    counter = KrCounter(**counter_dict)
+    counter.save()
+    print(f"Counter {counter.id} is saved to db at {ts}")
+
+
+def populate_counter(ts_begin, ts_end):
+    KrEvent = apps.get_model("api", "KrEvent")
+    KrArticle = apps.get_model("api", "KrArticle")
+
+    all_articles = KrArticle.objects.all()
+    all_events = KrEvent.objects.all()
+
+    for article in all_articles:
+        for event in all_events:
+            for ts in increment_four_hours(ts_begin, ts_end):
+                increment_counter(event, article, ts)
