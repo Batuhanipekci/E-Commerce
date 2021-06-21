@@ -12,7 +12,7 @@ def daily_data_load(filepath_valid, filepath_views):
 
 @shared_task
 def counter_4h():
-    ts_begin = timezone.now()
-    ts_end = ts_begin + timedelta(hours=4)
+    ts_end = timezone.now()
+    ts_begin = ts_end - timedelta(hours=4)
     populate_counter(ts_begin, ts_end)
     populate_high_attention_article(ts_begin, ts_end)
