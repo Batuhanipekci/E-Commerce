@@ -20,13 +20,13 @@ This command will build the containers, set the services up, implement necessary
 The process is not optimized and takes around ~30 minutes runtime. It is worth discussing how to speed up the seeding. However, in our case of daily & 4-hourly intervals of update time, that speed is just working fine.
 
 ## Case Study
-The articles on the E-Commerce firm are visited and bougth by end users. Visits are classified under the event "detailsView" while the buy transactions are under "transaction_item". The aggregated event data for articles are to be analyzed.
+The articles on the E-Commerce website are visited and bought by end users. Visits are classified under the event "detailsView" while the buy transactions are under "transaction_item". The aggregated event data for articles are to be analyzed.
 
 Tasks for that raw streaming data:
 
 1. How could the architectural design of such business case be? What services/tools could be integrated? What is the big picture?
-2. How could expose a real-time counter of detailsView over the last 4 hours be exposed on the UI?
-3. How could higher-attention articles highlighted and shown to the end user?
+2. How could a real-time counter of detailsView over the last 4 hours be exposed on the UI?
+3. How could higher-attention articles be highlighted and shown to the end user?
 4. How could the data be aggregated?
 5. How could high availability be ensured?
 6. How could this system be fed by seed data? How could it be scheduled?
@@ -43,12 +43,12 @@ The diagram above summarizes the tooling/services with black lines and processes
 
 
 # MVP
-The MVP is a Django application with two modules, webservice and analytics. The 2nd task and 3rd tasks are solved by the following Entity Relationship Diagram below. Django model properties are also used to make relevant queries on them to enrich the article detail page with a real-time counter over last 4 hours and a boolean if the article is a higher-attention article.
+The MVP is a Django application with two modules, webservice and analytics. The 2nd task and 3rd tasks are solved by the following the entity relationship diagram below. Django model properties are also used to make relevant queries on them to enrich the article detail page with a real-time counter over last 4 hours and a boolean if the article is a higher-attention article.
 <img src="img/erd.png" width="640" height="500" />
 
 The 4th task on how the data is aggregated can be answered by how the entities in the analytics module are populated by the data of the entities in the webservice module. Using DRF, kr_details_view and kr_transactions can be collected through the kr_article model properties which are exposed to the Article API endpoint. The entity kr_counter is then fed by those two tables on a scheduler which is run every 4 hours. Simultaneoulsy, kr_high_attention_article is populated with selecting the 100 most popular items from kr_counter, again every 4 hours (It can also be scheduled on a different interval). These updates are made through the Celery integration with Django, also including RabbitMQ under the hood. The scheduled tasks are written under api.tasks, and the celery configuration can be found under e_commerce.celery.
 
-The reporting table that could be used as the basis for daily management report is currently kr_counter. There, we can compare two random variables of details_view_count and transaction_item_count. This would allow us to work on whether there is a correlation, whether an article which is viewed frequently, is also solved frequently. In addition, causal analysis could be made in an A/B test setting, by tweaking the DRF Viewsets and showing in one url the count of views on the detail page, and not in another url.
+The reporting table that could be used as the basis for daily management report is currently kr_counter. There, we can compare two random variables of details_view_count and transaction_item_count. This would allow us to work on whether there is a correlation, whether an article which is viewed frequently, is also bought frequently. In addition, causal analysis could be made in an A/B test setting, by tweaking the DRF Viewsets and showing in one url the count of views on the detail page, and not in another url.
 
 Another reporting table could be prepared by merging kr_counter and kr_high_attention_article in another entity. Therefore, it can be analyzed further whether also highlighting the item causes higher transaction.
 
