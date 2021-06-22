@@ -12,6 +12,7 @@ The application e_commerce_app is dockerized, meaning that it can be run by only
 After cloning the Github project, please run the following commands:
 * cd e_commerce_app
 * make init
+
 PgAdmin is also installed for the ease of access to the resulting database.
 It is hosted on localhost:5050. The configuration of pgadmin user name and password, as well as database credentials can be found in .env.dev.
 
