@@ -1,7 +1,7 @@
 # Case Study: System Design and MVP of Data Operations for an E-Commerce Firm 
 
 ## Introduction 
-In this project, the architectural aspects of the datawarehousing / predictive analytics strategy for an imaginary E-Commerce firm are outlined. Technical challenges in dealing with high-frequency streaming data are addressed to pave the way for further discussion.
+In this project, the architectural aspects of the datawarehousing / analytics strategy for an imaginary E-Commerce firm are outlined. Technical challenges in dealing with high-frequency streaming data are addressed to pave the way for further discussion.
 Later, some of the arguments are supported by an MVP implementation of a webservice backend and an analytics pipeline for data aggregation. 
 
 The core elements of the technology stack are Django, Celery-RabbitMQ, and PostgreSQL. The application is then dockerized under the name "e_commerce_app" with persistent storage and mounted volumes.
@@ -12,6 +12,7 @@ The application e_commerce_app is dockerized, meaning that it can be run by only
 After cloning the Github project, please run the following commands:
 * cd e_commerce_app
 * make init
+
 PgAdmin is also installed for the ease of access to the resulting database.
 It is hosted on localhost:5050. The configuration of pgadmin user name and password, as well as database credentials can be found in .env.dev.
 
