@@ -1,7 +1,7 @@
 # Case Study: System Design and MVP of Data Operations for an E-Commerce Firm 
 
 ## Introduction 
-In this project, the architectural aspects of the datawarehousing / predictive analytics strategy for an imaginary E-Commerce firm are outlined. Technical challenges in dealing with high-frequency streaming data are addressed to pave the way for further discussion.
+In this project, the architectural aspects of the datawarehousing / analytics strategy for an imaginary E-Commerce firm are outlined. Technical challenges in dealing with high-frequency streaming data are addressed to pave the way for further discussion.
 Later, some of the arguments are supported by an MVP implementation of a webservice backend and an analytics pipeline for data aggregation. 
 
 The core elements of the technology stack are Django, Celery-RabbitMQ, and PostgreSQL. The application is then dockerized under the name "e_commerce_app" with persistent storage and mounted volumes.
