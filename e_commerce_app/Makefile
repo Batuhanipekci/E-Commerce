@@ -17,6 +17,7 @@ populate-counter:
 populate_high_attention_article:
 	docker-compose exec web python manage.py runscript run_populate_high_attention_article
 init:
+	docker-compose build
 	docker-compose up -d
 	docker exec e_commerce_app_web_1 python manage.py migrate
 	docker-compose exec web python manage.py runscript run_read_transactions
